@@ -1,0 +1,5 @@
+*.sln
+*.exe
+/calculator/bin/*
+/calculator/obj/*
+/calculator/Properties/*
