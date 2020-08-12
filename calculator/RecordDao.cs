@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace calculator
 {
@@ -38,7 +39,8 @@ namespace calculator
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         public static bool CheckTheRecord(RecordObj record)
@@ -61,11 +63,12 @@ namespace calculator
             {
                 if (mse.Source != null)
                     System.Windows.MessageBox.Show("MySqlException source: {0}", mse.Source);
-                throw;
+                throw mse;
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         public static void DeleteTheRecord(RecordObj record)
@@ -93,7 +96,8 @@ namespace calculator
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         public static List<RecordObj> QueryAllRecord()
@@ -127,15 +131,54 @@ namespace calculator
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
             return records;
         }
+
         public static MySqlConnection GetSqlConnection()
         {
             MySqlConnection conn = new MySqlConnection("server=localhost;user id=root;database=summerpractice;port=3308");
             conn.Open();
             return conn;
+        }
+        public static void InitDB()
+        {
+            MySqlConnection conn = null;
+            try
+            {
+                conn = GetSqlConnection();
+                MySqlCommand cmd = new MySqlCommand("CREATE TABLE cscalculator ( " +
+                                                                "Expression varchar(100), " +
+                                                                "Preorder varchar(100), " +
+                                                                "Postorder varchar(100), " +
+                                                                "Decim varchar(100), " +
+                                                                "Bina varchar(100)" +
+                                                                ")", conn);
+                int cnt = cmd.ExecuteNonQuery();
+                if (cnt > 0)
+                {
+                   Debug.Print("DB init finished");
+                }
+                else
+                {
+                    Debug.Print("DB init failed");
+                }
+            }
+            catch (MySqlException mse)
+            {
+                if (mse.Source != null)
+                    System.Windows.MessageBox.Show("MySqlException source: {0}", mse.Source);
+                throw;
+            }
+            finally
+            {
+                if(conn != null)
+                conn.Close();
+            }
+
+
         }
     }
 }

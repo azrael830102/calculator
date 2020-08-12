@@ -15,6 +15,7 @@ namespace calculator
         public MainWindow()
         {
             InitializeComponent();
+            RecordDao.InitDB();
             Query.Visibility = Visibility.Hidden;
         }
         private void Btn_Click(object sender, RoutedEventArgs e)
