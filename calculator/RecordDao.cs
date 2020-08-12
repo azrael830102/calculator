@@ -123,7 +123,7 @@ namespace calculator
             {
                 if (mse.Source != null)
                     Console.WriteLine("MySqlException source: {0}", mse.Source);
-                throw;
+                throw mse;
             }
             finally
             {
